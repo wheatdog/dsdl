@@ -13,6 +13,7 @@ module s6bitadder(overflow, sum, a, b);
    fulladder1bit fa4(sum[3], coutinner[3], a[3], b[3], coutinner[2]);
    fulladder1bit fa5(sum[4], coutinner[4], a[4], b[4], coutinner[3]);
    fulladder1bit fa6(sum[5], dummy, a[5], b[5], coutinner[4]);
-   assign overflow = (~(a[5]^b[5]))^sum[5];
+
+   assign overflow = ((~a[5])&(~b[5])&(sum[5]))|((a[5])&(b[5])&(~sum[5]));
 
 endmodule
