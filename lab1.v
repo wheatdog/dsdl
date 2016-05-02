@@ -6,12 +6,14 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
    output        overflow;
    output [27:0] bcd_out;
    output       sign;
+   output [5:0] clear;
 
    wire [11:0]   wsum, wdiff, wproduct;
    wire          wsum_overflow, wdiff_overflow;
    wire [27:0]   bcd_temp;
+   wire [1:0]    wsign_temp;
 
-   wire [15:0]   wbcd_format;
+   wire [15:0]   wbcd_format[1:0];
 
    s6bitadder add(wsum_overflow, wsum[5:0], a, b);
 
@@ -37,12 +39,16 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
    assign c[10]    = (w&a[4]) | ((~w)&(((~f[0])&(~f[1])&wsum[10])| ((f[0])&(~f[1])&wdiff[10])| ((~f[0])&(f[1])&wproduct[10])));
    assign c[11]    = (w&a[5]) | ((~w)&(((~f[0])&(~f[1])&wsum[11])| ((f[0])&(~f[1])&wdiff[11])| ((~f[0])&(f[1])&wproduct[11])));
 
-   s12bittobcd convert(sign, wbcd_format, c);
+   assign wbcd_format[0][15:8] = 8'b00000000;
+   s6bittobcd  s6convert(wsign_temp[0], wbcd_format[0][7:0], c[5:0]);
+   s12bittobcd s12convert(wsign_temp[1], wbcd_format[1], c);
 
-   bcd bcd_1(bcd_temp[6:0], wbcd_format[3:0]);
-   bcd bcd_2(bcd_temp[13:7], wbcd_format[7:4]);
-   bcd bcd_3(bcd_temp[20:14], wbcd_format[11:8]);
-   bcd bcd_4(bcd_temp[27:21], wbcd_format[15:12]);
+   bcd bcd_1(bcd_temp[6:0], ((~f[1])&wbcd_format[0][3:0])|(f[1]&wbcd_format[1][3:0]));
+   bcd bcd_2(bcd_temp[13:7], ((~f[1])&wbcd_format[0][7:4])|(f[1]&wbcd_format[1][7:4]));
+   bcd bcd_3(bcd_temp[20:14], ((~f[1])&wbcd_format[0][11:8])|(f[1]&wbcd_format[1][11:8]));
+   bcd bcd_4(bcd_temp[27:21], ((~f[1])&wbcd_format[0][15:12])|(f[1]&wbcd_format[1][15:12]));
 
    assign bcd_out = ~bcd_temp;
+   assign sign = ~(((~f[1])&wsign_temp[0]) | (f[1]&wsign_temp[1]));
+   assign clear = 6'b111111;
 endmodule
