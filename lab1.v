@@ -36,11 +36,11 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
    assign c[10]    = (w&a[4]) | ((~w)&(((~f[0])&(~f[1])&wsum[10])| ((f[0])&(~f[1])&wdiff[10])| ((~f[0])&(f[1])&wproduct[10])));
    assign c[11]    = (w&a[5]) | ((~w)&(((~f[0])&(~f[1])&wsum[11])| ((f[0])&(~f[1])&wdiff[11])| ((~f[0])&(f[1])&wproduct[11])));
 
-   s12bittobcd(sign, wbcd_format, c);
+   s12bittobcd convert(sign, wbcd_format, c);
 
-   bcd(bcd_out[6:0], wbcd_format[3:0]);
-   bcd(bcd_out[13:7], wbcd_format[7:4]);
-   bcd(bcd_out[20:14], wbcd_format[11:8]);
-   bcd(bcd_out[27:21], wbcd_format[15:12]);
+   bcd bcd_1(bcd_out[6:0], wbcd_format[3:0]);
+   bcd bcd_2(bcd_out[13:7], wbcd_format[7:4]);
+   bcd bcd_3(bcd_out[20:14], wbcd_format[11:8]);
+   bcd bcd_4(bcd_out[27:21], wbcd_format[15:12]);
 
 endmodule
