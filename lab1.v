@@ -9,6 +9,7 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
 
    wire [11:0]   wsum, wdiff, wproduct;
    wire          wsum_overflow, wdiff_overflow;
+   wire [27:0]   bcd_temp;
 
    wire [15:0]   wbcd_format;
 
@@ -38,9 +39,10 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
 
    s12bittobcd convert(sign, wbcd_format, c);
 
-   bcd bcd_1(bcd_out[6:0], wbcd_format[3:0]);
-   bcd bcd_2(bcd_out[13:7], wbcd_format[7:4]);
-   bcd bcd_3(bcd_out[20:14], wbcd_format[11:8]);
-   bcd bcd_4(bcd_out[27:21], wbcd_format[15:12]);
+   bcd bcd_1(bcd_temp[6:0], wbcd_format[3:0]);
+   bcd bcd_2(bcd_temp[13:7], wbcd_format[7:4]);
+   bcd bcd_3(bcd_temp[20:14], wbcd_format[11:8]);
+   bcd bcd_4(bcd_temp[27:21], wbcd_format[15:12]);
 
+   assign bcd_out = ~bcd_temp;
 endmodule
