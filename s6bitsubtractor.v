@@ -3,9 +3,10 @@ module s6bitsubtractor(overflow, diff, a, b);
    output [5:0] diff;
    output       overflow;
 
-   wire         dummy;
-   wire [5:0]   minusb;
+   wire         is32, wo;
+   wire [5:0]   negb;
 
-   s6bitadder ad1(dummy, minusb, ~b, 6'b000001);
-   s6bitadder ad2(overflow, diff, a, minusb);
+   s6bitadder ad1(is32, negb, ~b, 6'b000001);
+   s6bitadder ad2(wo, diff, a, negb);
+   assign overflow = ((is32)&((~a[5])&b[5])) |((~is32)&wo); 
 endmodule
