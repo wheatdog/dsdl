@@ -1,4 +1,4 @@
-module lab1(sign, bcd_out, overflow, c, a, b, f, w);
+module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    input [5:0] a, b;
    input [1:0] f;
    input       w;
@@ -24,7 +24,7 @@ module lab1(sign, bcd_out, overflow, c, a, b, f, w);
    assign wsum[11:6] = 6'b000000;
    assign wdiff[11:6] = 6'b000000;
 
-   assign overflow = (~f[0])&(~f[1])&wsum_overflow | (~f[0])&(f[1])&wdiff_overflow | 1'b0;
+   assign overflow = (~f[0])&(~f[1])&wsum_overflow | (f[0])&(~f[1])&wdiff_overflow | 1'b0;
 
    assign c[0]     = (w&b[0]) | ((~w)&(((~f[0])&(~f[1])&wsum[0]) | ((f[0])&(~f[1])&wdiff[0]) | ((~f[0])&(f[1])&wproduct[0]) ));
    assign c[1]     = (w&b[1]) | ((~w)&(((~f[0])&(~f[1])&wsum[1]) | ((f[0])&(~f[1])&wdiff[1]) | ((~f[0])&(f[1])&wproduct[1]) ));
