@@ -43,7 +43,7 @@ module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    s6bittobcd  s6convert_2(wsign_temp[0], wbcd_format[0][15:8], c[11:6]);
    s12bittobcd s12convert(wsign_temp[1], wbcd_format[1], c);
 
-   assign bcd_condition = {f[1],f[1],f[1],f[1]};
+   assign bcd_condition = {f[1]&(~f[0]),f[1]&(~f[0]),f[1]&(~f[0]),f[1]&(~f[0])};
    bcd bcd_1(bcd_temp[6:0], ((~bcd_condition)&wbcd_format[0][3:0])|(bcd_condition&wbcd_format[1][3:0]));
    bcd bcd_2(bcd_temp[13:7], ((~bcd_condition)&wbcd_format[0][7:4])|(bcd_condition&wbcd_format[1][7:4]));
    bcd bcd_3(bcd_temp[20:14], ((~bcd_condition)&wbcd_format[0][11:8])|(bcd_condition&wbcd_format[1][11:8]));
