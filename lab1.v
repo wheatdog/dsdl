@@ -9,7 +9,7 @@ module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    output [5:0] clear;
 
    wire [11:0]   wsum, wdiff, wproduct, wqr;
-   wire          wsum_overflow, wdiff_overflow;
+   wire          wsum_overflow, wdiff_overflow, dummy;
    wire [27:0]   bcd_temp;
    wire [1:0]    wsign_temp;
    wire [3:0]    bcd_condition;
@@ -40,7 +40,7 @@ module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    assign c[11]    = (w&a[5]) | ((~w)&(((~f[0])&(~f[1])&wsum[11])| ((f[0])&(~f[1])&wdiff[11])| ((~f[0])&(f[1])&wproduct[11])| ((f[0])&(f[1])&wqr[11])));
 
    s6bittobcd  s6convert_1(wsign_temp[0], wbcd_format[0][7:0], c[5:0]);
-   s6bittobcd  s6convert_2(wsign_temp[0], wbcd_format[0][15:8], c[11:6]);
+   s6bittobcd  s6convert_2(dummy, wbcd_format[0][15:8], c[11:6]);
    s12bittobcd s12convert(wsign_temp[1], wbcd_format[1], c);
 
    assign bcd_condition = {f[1]&(~f[0]),f[1]&(~f[0]),f[1]&(~f[0]),f[1]&(~f[0])};
