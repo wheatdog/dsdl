@@ -1,7 +1,9 @@
-module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
+module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w, clk);
    input [5:0] a, b;
    input [1:0] f;
    input       w;
+   input       clk;
+   
    output reg [11:0] c;
    output        overflow;
    output [27:0] bcd_out;
@@ -19,7 +21,7 @@ module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    s6bitadder add(wsum_overflow, wsum[5:0], a, b);
    s6bitsubtractor sub(wdiff_overflow, wdiff[5:0], a, b);
    s6bitmultiplier mul(wproduct, a, b);
-   s6bitdivider div(wqr[11:6], wqr[5:0], a, b);
+   s6bitdivider div(wqr[11:6], wqr[5:0], a, b, clk);
 
    s6bittobcd  s6convert_1(wsign_temp[0], wbcd_format[0][7:0], c[5:0]);
    s6bittobcd  s6convert_2(dummy, wbcd_format[0][15:8], c[11:6]);
@@ -40,10 +42,9 @@ module lab1(clear, sign, bcd_out, overflow, c, a, b, f, w);
    assign wdiff[11:6] = 6'b000000;
    assign overflow = ((~f[0])&(~f[1])&wsum_overflow) | ((f[0])&(~f[1])&wdiff_overflow) | (1'b0);
 
-   always @(a or b or f or w)
+   always @(posedge clk)
      begin
-        #7;
-
+       #6
         if (w == 1'b0)
           begin
              case(f)

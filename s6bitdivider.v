@@ -1,7 +1,9 @@
 // http://www.ece.lsu.edu/ee3755/2002/l07.html
 
-module s6bitdivider(q, r, a, b);
+module s6bitdivider(q, r, a, b, clk);
    input [5:0] a, b;
+   input       clk;
+   
    output reg [5:0] q, r;
 
    reg [11:0]   ra, rb, temp;
@@ -15,7 +17,8 @@ module s6bitdivider(q, r, a, b);
    s12bitsubtractor s(dummy, wdiff, wx, wy);
 
    integer      index;
-   always @(a or b)
+
+   always @(posedge clk)
      begin
         ra = {6'b000000, a};
         rb = {6'b000000, b};
@@ -29,7 +32,7 @@ module s6bitdivider(q, r, a, b);
              else
                begin
                   #1
-                    ra = {wdiff};
+                  ra = {wdiff};
                   q[index] = 1'b1;
                end
           end
