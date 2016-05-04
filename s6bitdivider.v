@@ -1,4 +1,4 @@
-http://www.ece.lsu.edu/ee3755/2002/l07.html
+// http://www.ece.lsu.edu/ee3755/2002/l07.html
 
 module s6bitdivider(q, r, a, b);
    input [5:0] a, b;
