@@ -3,14 +3,14 @@ module	lcddisplay (
                     iCLK,iRST_N,iRecord,
                     iHour, iMinute, iSecond, iCS,
                     //	LCD Side
-                    LCD_DATA,LCD_RW,LCD_EN,LCD_RS	);
+                    LCD_DATA,LCD_RW,LCD_EN,LCD_RS,LCD_ON);
    //	Host Side
    input			iCLK,iRST_N,iRecord;
    input [7:0] iHour,iMinute,iSecond, iCS;
 
    //	LCD Side
    output [7:0] LCD_DATA;
-   output       LCD_RW,LCD_EN,LCD_RS;
+   output       LCD_RW,LCD_EN,LCD_RS,LCD_ON;
    //	Internal Wires/Registers
    reg [5:0]    LUT_INDEX;
    reg [8:0]    LUT_DATA;
@@ -31,6 +31,8 @@ module	lcddisplay (
 
    integer  index;
 
+   assign LCD_ON = 1'b1;
+
    always@(negedge iRecord)
      begin
         for (index = 0; index < 8; index = index+1)
@@ -38,14 +40,14 @@ module	lcddisplay (
              Record1[index] <= Record2[index];
           end
 
-        Record2[7] <= iHour / 10;
-        Record2[6] <= iHour % 10;
-        Record2[5] <= iMinute / 10;
-        Record2[4] <= iMinute % 10;
-        Record2[3] <= iSecond / 10;
-        Record2[2] <= iSecond % 10;
-        Record2[1] <= iCS / 10;
-        Record2[0] <= iCS / 10;
+        Record2[7] <= 9'h130 + iHour / 10;
+        Record2[6] <= 9'h130 + iHour % 10;
+        Record2[5] <= 9'h130 + iMinute / 10;
+        Record2[4] <= 9'h130 + iMinute % 10;
+        Record2[3] <= 9'h130 + iSecond / 10;
+        Record2[2] <= 9'h130 + iSecond % 10;
+        Record2[1] <= 9'h130 + iCS / 10;
+        Record2[0] <= 9'h130 + iCS / 10;
      end
 
    always@(posedge iCLK or negedge iRST_N or negedge iRecord)
