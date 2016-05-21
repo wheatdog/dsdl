@@ -50,7 +50,7 @@ module	lcddisplay (
         Record2[0] <= 9'h130 + iCS / 10;
      end
 
-   always@(posedge iCLK or negedge iRST_N or negedge iRecord)
+   always@(posedge iCLK or negedge iRST_N)
      begin
         if(!iRST_N)
           begin
