@@ -44,7 +44,7 @@ module	lcddisplay (
 
    always@(posedge iCLK)
      begin
-        if (sig_rcd_edge)
+        if (sig_rcd_edge == 1'b1)
           begin
              for (index = 0; index < 8; index = index+1)
                begin
@@ -67,7 +67,7 @@ module	lcddisplay (
              mLCD_DATA	<=	0;
              mLCD_RS		<=	0;
           end
-        else if (sig_rst_edge)
+        else if (sig_rst_edge == 1'b1)
           begin
              for (index = 0; index < 8; index = index+1)
                begin
