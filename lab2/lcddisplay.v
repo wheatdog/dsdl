@@ -39,6 +39,7 @@ module	lcddisplay (
 
    integer  index;
 
+
    assign LCD_ON = 1'b1;
 
    always@(posedge iCLK)
