@@ -49,7 +49,7 @@ module	lcddisplay (
              Record2[3] <= 9'h130 + iSecond / 10;
              Record2[2] <= 9'h130 + iSecond % 10;
              Record2[1] <= 9'h130 + iCS / 10;
-             Record2[0] <= 9'h130 + iCS / 10;
+             Record2[0] <= 9'h130 + iCS % 10;
           end
         if(!iRST_N || !iRecord)
           begin
