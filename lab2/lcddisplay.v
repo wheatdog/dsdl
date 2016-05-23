@@ -23,6 +23,14 @@ module	lcddisplay (
    reg          mLCD_RS;
    wire         mLCD_Done;
 
+   reg [1:0]    det_rcd_edge;
+   wire         sig_rcd_edge;
+   assign sig_rcd_edge = (det_rcd_edge == 2'b10);
+
+   reg [1:0]    det_rst_edge;
+   wire         sig_rst_edge;
+   assign sig_rst_edge = (det_rst_edge == 2'b10);
+
    parameter	LCD_INTIAL	=	0;
    parameter	LCD_LINE1	=	5;
    parameter	LCD_CH_LINE	=	LCD_LINE1+16;
@@ -33,9 +41,9 @@ module	lcddisplay (
 
    assign LCD_ON = 1'b1;
 
-   always@(posedge iCLK or negedge iRST_N or negedge iRecord)
+   always@(posedge iCLK)
      begin
-        if (!iRecord)
+        if (sig_rcd_edge)
           begin
              for (index = 0; index < 8; index = index+1)
                begin
@@ -50,9 +58,22 @@ module	lcddisplay (
              Record2[2] <= 9'h130 + iSecond % 10;
              Record2[1] <= 9'h130 + iCS / 10;
              Record2[0] <= 9'h130 + iCS % 10;
+
+             LUT_INDEX	<=	0;
+             mLCD_ST		<=	0;
+             mDLY		<=	0;
+             mLCD_Start	<=	0;
+             mLCD_DATA	<=	0;
+             mLCD_RS		<=	0;
           end
-        if(!iRST_N || !iRecord)
+        else if (sig_rst_edge)
           begin
+             for (index = 0; index < 8; index = index+1)
+               begin
+                  Record1[index] <= 9'h130;
+                  Record2[index] <= 9'h130;
+               end
+
              LUT_INDEX	<=	0;
              mLCD_ST		<=	0;
              mDLY		<=	0;
@@ -62,6 +83,9 @@ module	lcddisplay (
           end
         else
           begin
+             det_rcd_edge <= {det_rcd_edge[0], iRecord};
+             det_rst_edge <= {det_rst_edge[0], iRST_N};
+
              if(LUT_INDEX<LUT_SIZE)
                begin
                   case(mLCD_ST)
