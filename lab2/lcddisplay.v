@@ -33,26 +33,25 @@ module	lcddisplay (
 
    assign LCD_ON = 1'b1;
 
-   always@(negedge iRecord)
+   always@(posedge iCLK or negedge iRST_N or negedge iRecord)
      begin
-        for (index = 0; index < 8; index = index+1)
+        if (!iRecord)
           begin
-             Record1[index] <= Record2[index];
+             for (index = 0; index < 8; index = index+1)
+               begin
+                  Record1[index] <= Record2[index];
+               end
+
+             Record2[7] <= 9'h130 + iHour / 10;
+             Record2[6] <= 9'h130 + iHour % 10;
+             Record2[5] <= 9'h130 + iMinute / 10;
+             Record2[4] <= 9'h130 + iMinute % 10;
+             Record2[3] <= 9'h130 + iSecond / 10;
+             Record2[2] <= 9'h130 + iSecond % 10;
+             Record2[1] <= 9'h130 + iCS / 10;
+             Record2[0] <= 9'h130 + iCS / 10;
           end
-
-        Record2[7] <= 9'h130 + iHour / 10;
-        Record2[6] <= 9'h130 + iHour % 10;
-        Record2[5] <= 9'h130 + iMinute / 10;
-        Record2[4] <= 9'h130 + iMinute % 10;
-        Record2[3] <= 9'h130 + iSecond / 10;
-        Record2[2] <= 9'h130 + iSecond % 10;
-        Record2[1] <= 9'h130 + iCS / 10;
-        Record2[0] <= 9'h130 + iCS / 10;
-     end
-
-   always@(posedge iCLK or negedge iRST_N)
-     begin
-        if(!iRST_N)
+        if(!iRST_N || !iRecord)
           begin
              LUT_INDEX	<=	0;
              mLCD_ST		<=	0;
