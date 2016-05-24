@@ -15,6 +15,7 @@ module	lcddisplay (
    reg [5:0]    LUT_INDEX;
    reg [8:0]    LUT_DATA;
    reg [8:0]    Record1[7:0], Record2[7:0]; // hh mm ss pp
+   reg [8:0]    colon, quotation;
 
    reg [5:0]    mLCD_ST;
    reg [17:0]   mDLY;
@@ -61,6 +62,8 @@ module	lcddisplay (
              Record2[2] <= 9'h130 + iSecond % 10;
              Record2[1] <= 9'h130 + iCS / 10;
              Record2[0] <= 9'h130 + iCS % 10;
+             colon <= 9'h13A;
+             quotation <= 9'h127;
 
              LUT_INDEX	<=	0;
              mLCD_ST		<=	0;
@@ -73,9 +76,11 @@ module	lcddisplay (
           begin
              for (index = 0; index < 8; index = index+1)
                begin
-                  Record1[index] <= 9'h130;
-                  Record2[index] <= 9'h130;
+                  Record1[index] <= 9'h120;
+                  Record2[index] <= 9'h120;
                end
+             colon <= 9'h120;
+             quotation <= 9'h120;
 
              LUT_INDEX	<=	0;
              mLCD_ST		<=	0;
@@ -133,13 +138,13 @@ module	lcddisplay (
           //	Line 1
           LCD_LINE1+0:	LUT_DATA	<=	Record1[7];	//	hh:mm:ss'pp
           LCD_LINE1+1:	LUT_DATA	<=	Record1[6];
-          LCD_LINE1+2:	LUT_DATA	<=	9'h13A;
+          LCD_LINE1+2:	LUT_DATA	<=	colon;
           LCD_LINE1+3:	LUT_DATA	<=	Record1[5];
           LCD_LINE1+4:	LUT_DATA	<=	Record1[4];
-          LCD_LINE1+5:	LUT_DATA	<=	9'h13A;
+          LCD_LINE1+5:	LUT_DATA	<=	colon;
           LCD_LINE1+6:	LUT_DATA	<=	Record1[3];
           LCD_LINE1+7:	LUT_DATA	<=	Record1[2];
-          LCD_LINE1+8:	LUT_DATA	<=	9'h127;
+          LCD_LINE1+8:	LUT_DATA	<=	quotation;
           LCD_LINE1+9:	LUT_DATA	<=	Record1[1];
           LCD_LINE1+10:	LUT_DATA	<=	Record1[0];
           LCD_LINE1+11:	LUT_DATA	<=	9'h120;
@@ -152,13 +157,13 @@ module	lcddisplay (
           //	Line 2
           LCD_LINE2+0:	LUT_DATA	<=	Record2[7]; //  hh:mm:ss'pp
           LCD_LINE2+1:	LUT_DATA	<=	Record2[6];
-          LCD_LINE2+2:	LUT_DATA	<=	9'h13A;
+          LCD_LINE2+2:	LUT_DATA	<=	colon;
           LCD_LINE2+3:	LUT_DATA	<=	Record2[5];
           LCD_LINE2+4:	LUT_DATA	<=	Record2[4];
-          LCD_LINE2+5:	LUT_DATA	<=	9'h13A;
+          LCD_LINE2+5:	LUT_DATA	<=	colon;
           LCD_LINE2+6:	LUT_DATA	<=	Record2[3];
           LCD_LINE2+7:	LUT_DATA	<=	Record2[2];
-          LCD_LINE2+8:	LUT_DATA	<=	9'h127;
+          LCD_LINE2+8:	LUT_DATA	<=	quotation;
           LCD_LINE2+9:	LUT_DATA	<=	Record2[1];
           LCD_LINE2+10:	LUT_DATA	<=	Record2[0];
           LCD_LINE2+11:	LUT_DATA	<=	9'h120;
