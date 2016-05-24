@@ -44,7 +44,9 @@ module	lcddisplay (
 
    always@(posedge iCLK)
      begin
-        if (sig_rcd_edge == 1'b1)
+        det_rcd_edge <= {det_rcd_edge[0], iRecord};
+        det_rst_edge <= {det_rst_edge[0], iRST_N};
+        if (sig_rcd_edge)
           begin
              for (index = 0; index < 8; index = index+1)
                begin
@@ -67,7 +69,7 @@ module	lcddisplay (
              mLCD_DATA	<=	0;
              mLCD_RS		<=	0;
           end
-        else if (sig_rst_edge == 1'b1)
+        else if (sig_rst_edge)
           begin
              for (index = 0; index < 8; index = index+1)
                begin
@@ -83,10 +85,7 @@ module	lcddisplay (
              mLCD_RS		<=	0;
           end
         else
-          begin
-             det_rcd_edge <= {det_rcd_edge[0], iRecord};
-             det_rst_edge <= {det_rst_edge[0], iRST_N};
-
+           begin
              if(LUT_INDEX<LUT_SIZE)
                begin
                   case(mLCD_ST)
