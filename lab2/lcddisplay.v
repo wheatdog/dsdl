@@ -40,6 +40,18 @@ module	lcddisplay (
 
    integer  index;
 
+   initial
+     begin
+        for (index = 0; index < 8; index = index+1)
+          begin
+             Record1[index] <= 9'h120;
+             Record2[index] <= 9'h120;
+          end
+        colon1 <= 9'h120;
+        colon2 <= 9'h120;
+        quotation1 <= 9'h120;
+        quotation2 <= 9'h120;
+     end
 
    assign LCD_ON = 1'b1;
 
