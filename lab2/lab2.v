@@ -23,18 +23,26 @@ module lab2 (clock,
 				
 				reg [23:0] temp_ms;
 				reg [43:0] count;
+				reg [1:0] run_con;
+				reg [1:0] zero_con;
 				
+				wire sig_zero;
+				wire sig_run;
+				
+				reg Tcondition;
 				initial 
 					begin 
 						temp_ms = 0;
 						count = 0;
+						Tcondition = 0;
 					end
 				
 				assign ics = temp_ms % 100;
 				assign isecond = (temp_ms % 6000) / 100;
 				assign iminute = (temp_ms % 360000) / 6000;
 				assign ihour = (temp_ms % 8640000) / 360000;
-				
+				assign sig_zero = (zero_con == 2'b10);
+				assign sig_run = (run_con == 2'b10);
 				
 				lcddisplay lcd(clock, iClear, iRecord, ihour, iminute, isecond, ics, LCD_DATA, LCD_RW, LCD_EN, LCD_RS, LCD_ON);
 				
@@ -54,11 +62,31 @@ module lab2 (clock,
 				
 				assign bcd_out[55:0] = ~bcd_temp[55:0];
 				
+					
+					
 				always @(posedge clock) 
 					begin
-					count <= count + 1;
-					if(count % 524288 == 1)
-						temp_ms <= temp_ms + 1;
+						run_con <= {run_con[0], iTiming};
+						zero_con <= {zero_con[0], iZero};
+						if(sig_zero)
+							begin
+								Tcondition = 0;
+								count <= 0;
+								temp_ms <= 0;
+							end
+						else if(sig_run)
+							begin
+								if(Tcondition)
+									Tcondition = 0;
+								else 
+									Tcondition = 1;
+							end
+						if(Tcondition)
+							begin
+								count <= count + 1;
+								if(count % 500000 == 1)
+									temp_ms <= temp_ms + 1;
+							end
 					end
 endmodule
 				
