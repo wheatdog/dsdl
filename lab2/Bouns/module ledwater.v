@@ -2,10 +2,10 @@ module ledwater( led, clk );
 output[15:0] led; 
 input  clk;  
 
- reg[15:0] led_r = 16'b000_000_0000_0001;  // 初始設定
+ reg[15:0] led_r = 16'b000_000_0000_0001;  // ???
 assign led = led_r[15:0];  
-reg dir = 1;  // 方向
-always @(posedge clk)    
+reg dir = 1;  // ?
+always@(posedge clk)  
 begin 
  if(led_r == 16'b0000_0000_0000_0001)    
  begin 
@@ -20,9 +20,9 @@ begin
  end 
   
  if(dir) 
-  led_r <= led_r << 1;   // 左移  
+  led_r <= led_r << 1;   // ???  
  else 
-  led_r <= led_r >> 1;   // 右移 
+  led_r <= led_r >> 1;   // ?? 
   
 end 
 endmodule

@@ -5,7 +5,7 @@ module clk_1( input clk_50mhz, input reset_n, output  reg clk_1hz);
  always @(posedge clk_50mhz or negedge reset_n)
     if(!reset_n) begin
                         count   <= 26'd2499999;
-                        clk_1hz <= 1'b0;
+                        clk_1hz <= 2'b00;
     end else begin
                         count   <= count + 26'h1ffffff;
         if(!count) begin

@@ -3,11 +3,13 @@ module lab2 (clock,
 				iClear, iRecord, iZero, iTiming,
 				//lcd
 				LCD_DATA, LCD_RW, LCD_EN, LCD_RS, LCD_ON,
-				bcd_out
+				bcd_out,
+				led_out
 				);
 				
 				input clock, iClear, iRecord, iZero, iTiming;
 				
+				output[15:0] led_out;
 				output[55:0] bcd_out;
 				output LCD_RW, LCD_EN, LCD_RS, LCD_ON;
 				output [7:0] LCD_DATA;
@@ -25,10 +27,10 @@ module lab2 (clock,
 				reg [43:0] count;
 				reg [1:0] run_con;
 				reg [1:0] zero_con;
-				
+				wire led_clk; 
 				wire sig_zero;
 				wire sig_run;
-				
+				wire sig;
 				reg Tcondition;
 				initial 
 					begin 
@@ -43,8 +45,13 @@ module lab2 (clock,
 				assign ihour = (temp_ms % 8640000) / 360000;
 				assign sig_zero = (zero_con == 2'b10);
 				assign sig_run = (run_con == 2'b10);
+			
+				assign sig = temp_ms;
+			
 				
 				lcddisplay lcd(clock, iClear, iRecord, ihour, iminute, isecond, ics, LCD_DATA, LCD_RW, LCD_EN, LCD_RS, LCD_ON);
+				ledwater bonus(led_out, sig);
+				
 				
 				s7bittobcd to_ms(bcd_1, ics[6:0]);
 				s7bittobcd to_second(bcd_2, isecond[6:0]);
